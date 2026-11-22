@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Maafin akuu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: hero kiri-teks/kanan-amplop, surat bertahap, galeri kenangan, surat penuh + jawaban */
+:root{
+  --bg:#eef0f7; --ink:#23243a; --muted:#5d6080; --accent:#c4506b; --accent-ink:#ffffff;
+  --deep:#3b3f78; --line:#d6d9ea; --card:#f9faff;
+  --paper:#fffdf8; --paper-ink:#2e2a3a; --paper-line:#e8e2d3;
+  --font-display:'Fraunces',Georgia,serif; --font-hand:'Caveat','Segoe Script',cursive; --font-body:'DM Sans',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14152a; --ink:#e9eaf6; --muted:#a2a5c8; --accent:#ef7d97; --accent-ink:#2a1420;
+  --deep:#9aa0f0; --line:#2c2e52; --card:#1b1d38; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14152a; --ink:#e9eaf6; --muted:#a2a5c8; --accent:#ef7d97; --accent-ink:#2a1420;
+  --deep:#9aa0f0; --line:#2c2e52; --card:#1b1d38; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;margin:0}
+.wrap{max-width:1040px;margin:0 auto}
+section{padding-block:72px}
+h1,h2{font-family:var(--font-display);text-wrap:balance;line-height:1.1;margin:0}
+h2{font-size:clamp(1.8rem,5vw,2.6rem)}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;min-height:0;padding-block:56px 40px}
+.hero h1{font-size:clamp(3rem,11vw,6.2rem);letter-spacing:-.02em}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:30ch;margin:20px 0 28px}
+.btn{display:inline-block;border:0;border-radius:999px;padding:14px 26px;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn:hover{filter:brightness(1.07)}
+.env{width:100%;max-width:380px;justify-self:center;cursor:pointer;background:none;border:0;padding:0}
+.env svg{width:100%;height:auto;display:block;overflow:visible}
+.flap{transform-box:fill-box;transform-origin:top center;transition:transform .7s ease}
+.env.open .flap{transform:scaleY(-1)}
+.env .note{transition:transform .8s ease .2s}
+.env.open .note{transform:translateY(-62px)}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.env{max-width:300px;justify-self:start}}
+
+/* surat bertahap */
+.step{max-width:640px}
+.bubble{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 24px;margin-top:16px;font-size:1.08rem}
+.bubble.hidden{display:none}
+.bubble.in{animation:pop .5s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.next-row{margin-top:22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.count{color:var(--muted);font-size:.9rem}
+
+/* galeri */
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin-top:32px}
+.shot{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 12px 16px;transition:transform .25s ease}
+.shot:nth-child(odd){transform:rotate(-1.4deg)}
+.shot:nth-child(even){transform:rotate(1.2deg)}
+.shot:hover{transform:rotate(0) translateY(-4px)}
+.shot .pic{aspect-ratio:1/1;max-width:100%;border-radius:3px;overflow:hidden;background:var(--bg);display:grid;place-items:center}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot svg{width:78%;height:auto}
+.shot figcaption{font-family:var(--font-hand);font-size:1.45rem;line-height:1.25;margin-top:12px;color:var(--ink)}
+@media(max-width:900px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.gallery{grid-template-columns:1fr}.shot:nth-child(n){transform:none}}
+
+/* surat penuh */
+.paper{background:var(--paper);color:var(--paper-ink);max-width:680px;margin:32px auto 0;padding:44px clamp(22px,6vw,56px) 48px;border-radius:4px;
+  box-shadow:0 18px 50px rgba(20,20,60,.28);position:relative;
+  background-image:repeating-linear-gradient(transparent 0 35px,var(--paper-line) 35px 36px);background-position:0 60px}
+.paper .hand{font-family:var(--font-hand);font-size:clamp(1.35rem,3.6vw,1.65rem);line-height:36px;margin:0 0 36px}
+.paper .to{font-weight:700;font-size:1.9rem;margin-bottom:36px}
+.paper .sign{text-align:right;font-size:1.9rem;margin:0}
+.doodle{position:absolute;width:64px;opacity:.9}
+.d1{top:-22px;right:26px;transform:rotate(12deg)}
+.d2{bottom:-20px;left:22px;transform:rotate(-10deg)}
+.answer{max-width:680px;margin:56px auto 0;text-align:center}
+.answer h2{margin-bottom:22px}
+.answer .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;min-height:120px;align-items:flex-start;position:relative}
+.reply{margin-top:22px;font-family:var(--font-hand);font-size:1.8rem;color:var(--accent);min-height:2.4rem}
+footer{padding-block:36px 48px;color:var(--muted);font-size:.85rem;text-align:center}
+
+.pre{opacity:0;transform:translateY(18px)}
+.reveal{transition:opacity .7s ease,transform .7s ease}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.pre{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<section class="hero" id="atas">
+  <div>
+    <p class="eyebrow" id="untuk"></p>
+    <h1>Maaf<em>.</em></h1>
+    <p class="lead" id="lead"></p>
+    <button class="btn" id="buka">Buka suratnya</button>
+  </div>
+  <button class="env" id="env" aria-label="Amplop surat, ketuk untuk membuka">
+    <svg viewBox="0 0 320 250" role="img" aria-hidden="true">
+      <rect class="note" x="38" y="46" width="244" height="150" rx="6" fill="var(--paper)" stroke="var(--paper-line)"/>
+      <g class="note" stroke="var(--paper-line)" stroke-width="2"><line x1="62" y1="86" x2="258" y2="86"/><line x1="62" y1="112" x2="258" y2="112"/><line x1="62" y1="138" x2="200" y2="138"/></g>
+      <rect x="20" y="80" width="280" height="150" rx="10" fill="var(--deep)"/>
+      <path d="M20 90 L160 178 L300 90 L300 220 Q300 230 290 230 L30 230 Q20 230 20 220 Z" fill="var(--deep)" stroke="var(--bg)" stroke-opacity=".25"/>
+      <g class="flap"><path d="M20 90 Q20 80 30 80 L290 80 Q300 80 300 90 L160 178 Z" fill="var(--deep)" stroke="var(--bg)" stroke-opacity=".35"/></g>
+      <path d="M160 146 c-9-12-26-4-20 10 5 11 20 18 20 18 s15-7 20-18 c6-14-11-22-20-10z" fill="var(--accent)" transform="translate(0,22)"/>
+    </svg>
+  </button>
+</section>
+
+<section id="surat">
+  <div class="step">
+    <p class="eyebrow">Surat untukmu</p>
+    <h2>Ada yang mau aku bilang.</h2>
+    <div id="bubbles"></div>
+    <div class="next-row"><button class="btn" id="lanjut">Lanjut baca</button><span class="count" id="count"></span></div>
+  </div>
+</section>
+
+<section id="penuh">
+  <article class="paper" id="paper">
+    <svg class="doodle d1" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 54 C8 36 6 18 20 14 c8-2 12 4 12 8 0-4 4-10 12-8 14 4 12 22-12 40z" fill="var(--accent)"/></svg>
+    <svg class="doodle d2" viewBox="0 0 64 64" aria-hidden="true"><g fill="#e9b949"><circle cx="32" cy="14" r="9"/><circle cx="50" cy="32" r="9"/><circle cx="32" cy="50" r="9"/><circle cx="14" cy="32" r="9"/></g><circle cx="32" cy="32" r="8" fill="#c4506b"/></svg>
+  </article>
+
+  <div class="answer">
+    <h2>Dimaafin, nggak?</h2>
+    <div class="row">
+      <button class="btn" id="iya">Iya, aku maafin</button>
+      <button class="btn ghost" id="engga">Aku pikir dulu</button>
+    </div>
+    <p class="reply" id="reply" aria-live="polite"></p>
+  </div>
+</section>
+
+<footer>Dibuat dengan sepenuh hati.</footer>
+</div>
+
+<script>
+/* ===== EDIT BAGIAN INI SAJA ===== */
+const CONFIG = {
+  untuk: "Mayang",                 // nama dia
+  dari: "Refran nicole",                         // nama kamu
+  lead: "Maaf ya kalo aku suka ngejek kamu.",
+  // Tiap paragraf muncul satu per satu saat tombol "Lanjut baca" ditekan
+  surat: [
+    "Aku minta maaf karena selalu ngejek kamu. aku niatnya bercanda, tapi maaf ya karena candaan aku ga lucu terus malah bikin kamu sakit hati",
+    "Aku gamau mengelak di balik kata bercanda, aku tau kok ini salah maaf ya",
+    "Harusnya aku ga ngejek kamu terus",
+    "Mulai sekarang aku bakal ngurangin buat ngejek kamu dan aku bakal lebih support kamu"
+  ],
+  balasanIya: "Makasii yaaa. aku janji ngga bakal ngejek lagi hehe",
+  balasanEngga: [
+    "Okayy aku paham kok.",
+    "Pencet iyaa aja",
+    "yu bisa yu maafin aku",
+    "Pencet Iya aja yaa, hehe"
+  ]
+};
+/* ================================= */
+
+const $ = id => document.getElementById(id);
+const art = {
+  bunga:'<svg viewBox="0 0 100 100"><g fill="#ef7d97"><circle cx="50" cy="26" r="15"/><circle cx="74" cy="50" r="15"/><circle cx="50" cy="74" r="15"/><circle cx="26" cy="50" r="15"/></g><circle cx="50" cy="50" r="12" fill="#e9b949"/></svg>',
+  bulan:'<svg viewBox="0 0 100 100"><path d="M64 14 a38 38 0 1 0 22 62 a30 30 0 0 1 -22 -62z" fill="#e9b949"/><circle cx="76" cy="26" r="2.5" fill="#e9b949"/><circle cx="86" cy="44" r="2" fill="#e9b949"/></svg>',
+  cangkir:'<svg viewBox="0 0 100 100"><path d="M20 38 h52 v22 a22 22 0 0 1 -22 22 h-8 a22 22 0 0 1 -22 -22z" fill="var(--deep)"/><path d="M72 46 h6 a10 10 0 0 1 0 20 h-8" fill="none" stroke="var(--deep)" stroke-width="6"/><g stroke="var(--muted)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M34 28 q-5-6 0-12"/><path d="M48 28 q-5-6 0-12"/></g></svg>',
+  bintang:'<svg viewBox="0 0 100 100"><path d="M50 10 l11 26 28 3 -21 19 6 28 -24-14 -24 14 6-28 -21-19 28-3z" fill="#e9b949"/></svg>',
+  awan:'<svg viewBox="0 0 100 100"><path d="M28 70 a16 16 0 0 1 2-32 a22 22 0 0 1 42 4 a14 14 0 0 1 0 28z" fill="var(--deep)" opacity=".85"/></svg>',
+  hati:'<svg viewBox="0 0 100 100"><path d="M50 86 C14 60 10 30 30 24 c10-3 18 3 20 10 2-7 10-13 20-10 20 6 16 36-20 62z" fill="#ef7d97"/></svg>'
+};
+
+// Hero
+$('untuk').textContent = CONFIG.untuk;
+$('lead').textContent = CONFIG.lead;
+const env = $('env');
+function openEnv(){ env.classList.add('open'); }
+env.addEventListener('click', openEnv);
+$('buka').addEventListener('click', () => { openEnv(); setTimeout(()=>$('surat').scrollIntoView({behavior:'smooth'}),450); });
+
+// Surat bertahap
+const bub = $('bubbles'); let shown = 0;
+CONFIG.surat.forEach((t,i)=>{ const d=document.createElement('div'); d.className='bubble '+(i===0?'in':'hidden'); d.textContent=t; bub.appendChild(d); });
+shown = 1;
+function upd(){
+  $('count').textContent = shown+' dari '+CONFIG.surat.length;
+  if(shown>=CONFIG.surat.length){ $('lanjut').textContent='Lihat suratnya'; }
+}
+upd();
+$('lanjut').addEventListener('click',()=>{
+  if(shown>=CONFIG.surat.length){ $('penuh').scrollIntoView({behavior:'smooth'}); return; }
+  const el = bub.children[shown]; el.classList.remove('hidden'); el.classList.add('in'); shown++; upd();
+});
+
+// Surat penuh
+const paper = $('paper');
+const to = document.createElement('p'); to.className='hand to'; to.textContent = 'Untuk '+CONFIG.untuk.replace(/^Untuk\s+/i,'')+',';
+paper.appendChild(to);
+CONFIG.surat.forEach(t=>{ const p=document.createElement('p'); p.className='hand'; p.textContent=t; paper.appendChild(p); });
+const sg = document.createElement('p'); sg.className='hand sign'; sg.textContent='Dari '+CONFIG.dari; paper.appendChild(sg);
+
+// Jawaban
+let n=0;
+$('iya').addEventListener('click',()=>{ $('reply').textContent=CONFIG.balasanIya; });
+const eng=$('engga');
+eng.addEventListener('click',()=>{
+  const m=CONFIG.balasanEngga; $('reply').textContent=m[Math.min(n,m.length-1)]; n++;
+  if(n>=2){ const d=Math.min(n,6); eng.style.transform='translate('+(Math.random()>.5?1:-1)*d*14+'px,'+(Math.random()*30)+'px)'; }
+});
+
+// Muncul pelan saat di-scroll (elemen yang sudah terlihat tidak disembunyikan)
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.remove('pre'); io.unobserve(e.target);} }),{threshold:.12});
+  document.querySelectorAll('.shot,.paper,.answer').forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.top>innerHeight){ el.classList.add('pre','reveal'); io.observe(el); }
+  });
+}
+</script>
+
+</body>
+</html>
